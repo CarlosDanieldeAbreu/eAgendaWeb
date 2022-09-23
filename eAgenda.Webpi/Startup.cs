@@ -5,6 +5,7 @@ using eAgenda.Infra.Configs;
 using eAgenda.Infra.Orm;
 using eAgenda.Infra.Orm.ModuloTarefa;
 using eAgenda.Webpi.Controllers.Config.AutoMapperConfig;
+using eAgenda.Webpi.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -49,7 +50,11 @@ namespace eAgenda.Webpi
 
             services.AddTransient<ServicoTarefa>();
 
-            services.AddControllers();
+            services.AddControllers(config =>
+            {
+                config.Filters.Add(new ValidarViewModelActionFilter());
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "eAgenda.Webpi", Version = "v1" });

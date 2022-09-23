@@ -1,5 +1,6 @@
 ﻿using eAgenda.Infra.Configs;
 using Serilog;
+using Serilog.Events;
 
 namespace eAgenda.Infra.Logging
 {
@@ -12,6 +13,7 @@ namespace eAgenda.Infra.Logging
             var diretorioSaida = config.ConfiguracaoLogs.DiretorioSaida;
 
             Log.Logger = new LoggerConfiguration()
+                   .MinimumLevel.Override("Microsoft", LogEventLevel.Information).Enrich.FromLogContext()
                    .MinimumLevel.Debug()
                    .WriteTo.Debug()
                    .WriteTo.Seq("http://localhost:5341")

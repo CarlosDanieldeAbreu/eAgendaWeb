@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
 using eAgenda.Aplicacao.ModuloTarefa;
 using eAgenda.Dominio.ModuloTarefa;
-using eAgenda.Infra.Configs;
-using eAgenda.Infra.Orm;
-using eAgenda.Infra.Orm.ModuloTarefa;
 using eAgenda.Webapi.ViewModels;
-using eAgenda.Webpi.Controllers.Config.AutoMapperConfig;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -15,7 +11,8 @@ namespace eAgenda.Webpi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TarefasController : ControllerBase
+
+    public class TarefasController : eAgendaControllerBase
     {
         private readonly ServicoTarefa servicoTarefa;
         private readonly IMapper mapeadorTarefas;
@@ -32,13 +29,7 @@ namespace eAgenda.Webpi.Controllers
             var tarefaResult = servicoTarefa.SelecionarTodos(StatusTarefaEnum.Todos);
 
             if (tarefaResult.IsFailed)
-            {
-                return StatusCode(500, new
-                {
-                    sucesso = false,
-                    erros = tarefaResult.Errors.Select(x => x.Message)
-                });
-            }
+                return InternalError(tarefaResult);
 
             return Ok(new
             {
@@ -52,23 +43,11 @@ namespace eAgenda.Webpi.Controllers
         {
             var tarefaResult = servicoTarefa.SelecionarPorId(id);
 
-            if (tarefaResult.Errors.Any(x => x.Message.Contains("não encontrada")))
-            {
-                return NotFound(new
-                {
-                    sucesso = false,
-                    erros = tarefaResult.Errors.Select(x => x.Message)
-                });
-            }
+            if (tarefaResult.IsFailed && RegistroNaoEncontrado(tarefaResult))
+                return NotFound(tarefaResult);
 
             if (tarefaResult.IsFailed)
-            {
-                return StatusCode(500, new
-                {
-                    sucesso = false,
-                    erros = tarefaResult.Errors.Select(x => x.Message)
-                });
-            }
+                return InternalError(tarefaResult);
 
             return Ok(new
             {
@@ -80,31 +59,12 @@ namespace eAgenda.Webpi.Controllers
         [HttpPost]
         public ActionResult<FormsTarefaViewModel> Inserir(InserirTarefaViewModel tarefaVM)
         {
-            var listaErros = ModelState.Values
-                .SelectMany(x => x.Errors)
-                .Select(x => x.ErrorMessage);
-
-            if (listaErros.Any())
-            {
-                return BadRequest(new
-                {
-                    sucesso = false,
-                    erros = listaErros.ToList()
-                });
-            }
-
             var tarefa = mapeadorTarefas.Map<Tarefa>(tarefaVM);
 
             var tarefaResult = servicoTarefa.Inserir(tarefa);
 
             if (tarefaResult.IsFailed)
-            {
-                return StatusCode(500, new
-                {
-                    sucesso = false,
-                    erros = tarefaResult.Errors.Select(x => x.Message)
-                });
-            }
+                return InternalError(tarefaResult);
 
             return Ok(new
             {
@@ -116,42 +76,17 @@ namespace eAgenda.Webpi.Controllers
         [HttpPut("{id:guid}")]
         public ActionResult<FormsTarefaViewModel> Editar(Guid id, EditarTarefaViewModel tarefaVM)
         {
-            var listaErros = ModelState.Values
-                .SelectMany(x => x.Errors)
-                .Select(x => x.ErrorMessage);
-
-            if (listaErros.Any())
-            {
-                return BadRequest(new
-                {
-                    sucesso = false,
-                    erros = listaErros.ToList()
-                });
-            }
-
             var tarefaResult = servicoTarefa.SelecionarPorId(id);
 
-            if (tarefaResult.Errors.Any(x => x.Message.Contains("não encontrada")))
-            {
-                return NotFound(new
-                {
-                    sucesso = false,
-                    erros = tarefaResult.Errors.Select(x => x.Message)
-                });
-            }
+            if (tarefaResult.IsFailed && RegistroNaoEncontrado(tarefaResult))
+                return NotFound(tarefaResult);
 
             var tarefa = mapeadorTarefas.Map(tarefaVM, tarefaResult.Value);
 
             tarefaResult = servicoTarefa.Editar(tarefa);
 
             if (tarefaResult.IsFailed)
-            {
-                return StatusCode(500, new
-                {
-                    sucesso = false,
-                    erros = tarefaResult.Errors.Select(x => x.Message)
-                });
-            }
+                return InternalError(tarefaResult);
 
             return Ok(new
             {
@@ -165,23 +100,11 @@ namespace eAgenda.Webpi.Controllers
         {
             var tarefaResult = servicoTarefa.Excluir(id);
 
-            if (tarefaResult.Errors.Any(x => x.Message.Contains("não encontrada")))
-            {
-                return NotFound(new
-                {
-                    sucesso = false,
-                    erros = tarefaResult.Errors.Select(x => x.Message)
-                });
-            }
+            if (tarefaResult.IsFailed && RegistroNaoEncontrado<Tarefa>(tarefaResult))
+                return NotFound(tarefaResult);
 
             if (tarefaResult.IsFailed)
-            {
-                return StatusCode(500, new
-                {
-                    sucesso = false,
-                    erros = tarefaResult.Errors.Select(x => x.Message)
-                });
-            }
+                return InternalError<Tarefa>(tarefaResult);
 
             return NoContent();
         }

@@ -7,6 +7,8 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="6.0.1" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
@@ -14,6 +16,7 @@
     <ProjectReference Include="..\eAgenda.Aplicacao\eAgenda.Aplicacao.csproj" />
     <ProjectReference Include="..\eAgenda.Dominio\eAgenda.Dominio.csproj" />
     <ProjectReference Include="..\eAgenda.Infra.Configs\eAgenda.Infra.Configs.csproj" />
+    <ProjectReference Include="..\eAgenda.Infra.Logging\eAgenda.Infra.Logging.csproj" />
     <ProjectReference Include="..\eAgenda.Infra.Orm\eAgenda.Infra.Orm.csproj" />
   </ItemGroup>
 
