@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using eAgenda.Aplicacao.ModuloTarefa;
 using eAgenda.Dominio.ModuloTarefa;
-using eAgenda.Webapi.ViewModels;
+using eAgenda.Webpi.Controllers.Compartilhado;
+using eAgenda.Webpi.ViewModels.ModuloTarefa;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace eAgenda.Webpi.Controllers
+namespace eAgenda.Webpi.Controllers.ModuloTarefa
 {
     [Route("api/[controller]")]
     [ApiController]

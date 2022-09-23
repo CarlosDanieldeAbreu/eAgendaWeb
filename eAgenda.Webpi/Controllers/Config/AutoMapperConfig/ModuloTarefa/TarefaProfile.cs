@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using eAgenda.Dominio.Compartilhado;
 using eAgenda.Dominio.ModuloTarefa;
-using eAgenda.Webapi.ViewModels;
+using eAgenda.Webpi.ViewModels.ModuloTarefa;
 
-namespace eAgenda.Webpi.Controllers.Config.AutoMapperConfig
+namespace eAgenda.Webpi.Controllers.Config.AutoMapperConfig.ModuloTarefa
 {
     public class TarefaProfile : Profile
     {
-       public TarefaProfile()
+        public TarefaProfile()
         {
             ConverterDeEntidadeParaViewModel();
             ConverterDeModelParaEntidade();
@@ -16,18 +16,18 @@ namespace eAgenda.Webpi.Controllers.Config.AutoMapperConfig
         private void ConverterDeModelParaEntidade()
         {
             CreateMap<InserirTarefaViewModel, Tarefa>()
-                            .ForMember(destino => destino.Itens, opt => opt.Ignore())
-                            .AfterMap((viewModel, tarefa) =>
-                            {
-                                foreach (var itemVM in viewModel.Itens)
-                                {
-                                    var item = new ItemTarefa();
+                .ForMember(destino => destino.Itens, opt => opt.Ignore())
+                .AfterMap((viewModel, tarefa) =>
+                {
+                    foreach (var itemVM in viewModel.Itens)
+                    {
+                        var item = new ItemTarefa();
 
-                                    item.Titulo = itemVM.Titulo;
+                        item.Titulo = itemVM.Titulo;
 
-                                    tarefa.AdicionarItem(item);
-                                }
-                            });
+                        tarefa.AdicionarItem(item);
+                    }
+                });
 
             CreateMap<EditarTarefaViewModel, Tarefa>()
                 .ForMember(destino => destino.Itens, opt => opt.Ignore())
@@ -60,8 +60,8 @@ namespace eAgenda.Webpi.Controllers.Config.AutoMapperConfig
         private void ConverterDeEntidadeParaViewModel()
         {
             CreateMap<Tarefa, ListarTarefaViewModel>()
-                            .ForMember(destino => destino.Prioridade, opt => opt.MapFrom(origem => origem.Prioridade.GetDescription()))
-                            .ForMember(destino => destino.Situacao, opt => opt.MapFrom(origem => origem.PercentualConcluido == 100 ? "Concluído" : "Pendente"));
+                .ForMember(destino => destino.Prioridade, opt => opt.MapFrom(origem => origem.Prioridade.GetDescription()))
+                .ForMember(destino => destino.Situacao, opt => opt.MapFrom(origem => origem.PercentualConcluido == 100 ? "Concluído" : "Pendente"));
             CreateMap<Tarefa, VisualizarTarefaViewModel>()
                 .ForMember(destino => destino.Prioridade, opt => opt.MapFrom(origem => origem.Prioridade.GetDescription()))
                 .ForMember(destino => destino.Situacao, opt => opt.MapFrom(origem => origem.PercentualConcluido == 100 ? "Concluído" : "Pendente"))

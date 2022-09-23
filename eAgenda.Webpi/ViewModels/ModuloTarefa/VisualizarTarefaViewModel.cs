@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace eAgenda.Webapi.ViewModels
+namespace eAgenda.Webpi.ViewModels.ModuloTarefa
 {
     public class VisualizarTarefaViewModel
     {
         public VisualizarTarefaViewModel()
         {
-            Itens = new List<VisualizarItemTarefaViewModel>();        
+            Itens = new List<VisualizarItemTarefaViewModel>();
         }
 
         public string Titulo { get; set; }

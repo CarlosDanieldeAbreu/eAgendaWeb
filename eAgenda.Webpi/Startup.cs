@@ -1,10 +1,14 @@
+using eAgenda.Aplicacao.ModuloContato;
 using eAgenda.Aplicacao.ModuloTarefa;
 using eAgenda.Dominio;
+using eAgenda.Dominio.ModuloContato;
 using eAgenda.Dominio.ModuloTarefa;
 using eAgenda.Infra.Configs;
 using eAgenda.Infra.Orm;
+using eAgenda.Infra.Orm.ModuloContato;
 using eAgenda.Infra.Orm.ModuloTarefa;
-using eAgenda.Webpi.Controllers.Config.AutoMapperConfig;
+using eAgenda.Webpi.Controllers.Config.AutoMapperConfig.ModuloContato;
+using eAgenda.Webpi.Controllers.Config.AutoMapperConfig.ModuloTarefa;
 using eAgenda.Webpi.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,13 +46,16 @@ namespace eAgenda.Webpi
             services.AddAutoMapper(config =>
             {
                 config.AddProfile<TarefaProfile>();
+                config.AddProfile<ContatoProfile>();
             });
             services.AddSingleton((x) => new ConfiguracaoAplicacaoeAgenda().ConnectionStrings);
 
             services.AddScoped<IContextoPersistencia, eAgendaDbContext>();
             services.AddScoped<IRepositorioTarefa, RepositorioTarefaOrm>();
+            services.AddScoped<IRepositorioContato, RepositorioContatoOrm>();
 
             services.AddTransient<ServicoTarefa>();
+            services.AddTransient<ServicoContato>();
 
             services.AddControllers(config =>
             {

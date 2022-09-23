@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace eAgenda.Webapi.ViewModels
+namespace eAgenda.Webpi.ViewModels.ModuloTarefa
 {
     public class ListarTarefaViewModel
     {
@@ -11,6 +11,6 @@ namespace eAgenda.Webapi.ViewModels
         public string Prioridade { get; set; }
 
         public string Situacao { get; set; }
-        
+
     }
 }

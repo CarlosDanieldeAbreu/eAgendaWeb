@@ -1,7 +1,7 @@
 ﻿using eAgenda.Dominio.ModuloTarefa;
 using System;
 
-namespace eAgenda.Webapi.ViewModels
+namespace eAgenda.Webpi.ViewModels.ModuloTarefa
 {
     public class FormsItemTarefaViewModel
     {
