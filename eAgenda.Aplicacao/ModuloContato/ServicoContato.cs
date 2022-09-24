@@ -81,6 +81,16 @@ namespace eAgenda.Aplicacao.ModuloContato
             return Result.Ok(contato);
         }
 
+        public Result Excluir(Guid id)
+        {
+            var contatoResult = SelecionarPorId(id);
+
+            if (contatoResult.IsSuccess)
+                return Excluir(contatoResult.Value);
+
+            return Result.Fail(contatoResult.Errors);
+        }
+
         public Result Excluir(Contato contato)
         {
             Log.Logger.Debug("Tentando excluir contato... {@c}", contato);

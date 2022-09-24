@@ -1,13 +1,21 @@
+using eAgenda.Aplicacao.ModuloCompromisso;
 using eAgenda.Aplicacao.ModuloContato;
+using eAgenda.Aplicacao.ModuloDespesa;
 using eAgenda.Aplicacao.ModuloTarefa;
 using eAgenda.Dominio;
+using eAgenda.Dominio.ModuloCompromisso;
 using eAgenda.Dominio.ModuloContato;
+using eAgenda.Dominio.ModuloDespesa;
 using eAgenda.Dominio.ModuloTarefa;
 using eAgenda.Infra.Configs;
 using eAgenda.Infra.Orm;
+using eAgenda.Infra.Orm.ModuloCompromisso;
 using eAgenda.Infra.Orm.ModuloContato;
+using eAgenda.Infra.Orm.ModuloDespesa;
 using eAgenda.Infra.Orm.ModuloTarefa;
+using eAgenda.Webpi.Controllers.Config.AutoMapperConfig.ModuloCompromisso;
 using eAgenda.Webpi.Controllers.Config.AutoMapperConfig.ModuloContato;
+using eAgenda.Webpi.Controllers.Config.AutoMapperConfig.ModuloDespesa;
 using eAgenda.Webpi.Controllers.Config.AutoMapperConfig.ModuloTarefa;
 using eAgenda.Webpi.Filters;
 using Microsoft.AspNetCore.Builder;
@@ -47,15 +55,24 @@ namespace eAgenda.Webpi
             {
                 config.AddProfile<TarefaProfile>();
                 config.AddProfile<ContatoProfile>();
+                config.AddProfile<CompromissoProfile>();
+                config.AddProfile<CategoriaProfile>();
+                config.AddProfile<DespesaProfile>();
             });
             services.AddSingleton((x) => new ConfiguracaoAplicacaoeAgenda().ConnectionStrings);
 
             services.AddScoped<IContextoPersistencia, eAgendaDbContext>();
             services.AddScoped<IRepositorioTarefa, RepositorioTarefaOrm>();
             services.AddScoped<IRepositorioContato, RepositorioContatoOrm>();
+            services.AddScoped<IRepositorioCompromisso, RepositorioCompromissoOrm>();
+            services.AddScoped<IRepositorioCategoria, RepositorioCategoriaOrm>();
+            services.AddScoped<IRepositorioDespesa, RepositorioDespesaOrm>();
 
             services.AddTransient<ServicoTarefa>();
             services.AddTransient<ServicoContato>();
+            services.AddTransient<ServicoCompromisso>();
+            services.AddTransient<ServicoCategoria>();
+            services.AddTransient<ServicoDespesa>();
 
             services.AddControllers(config =>
             {

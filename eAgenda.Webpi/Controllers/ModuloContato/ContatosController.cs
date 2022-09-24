@@ -97,7 +97,7 @@ namespace eAgenda.Webpi.Controllers.ModuloContato
         [HttpDelete("{id:guid}")]
         public ActionResult Excluir(Guid id)
         {
-            var contatoResult = servicoContato.SelecionarPorId(id);
+            var contatoResult = servicoContato.Excluir(id);
 
             if (contatoResult.IsFailed && RegistroNaoEncontrado<Contato>(contatoResult))
                 return NotFound(contatoResult);

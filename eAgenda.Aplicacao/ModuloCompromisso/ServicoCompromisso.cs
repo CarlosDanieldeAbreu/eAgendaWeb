@@ -81,6 +81,16 @@ namespace eAgenda.Aplicacao.ModuloCompromisso
             return Result.Ok(compromisso);
         }
 
+        public Result Excluir(Guid id)
+        {
+            var compromissoResult = SelecionarPorId(id);
+
+            if (compromissoResult.IsSuccess)
+                return Excluir(compromissoResult.Value);
+
+            return Result.Fail(compromissoResult.Errors);
+        }
+
         public Result Excluir(Compromisso compromisso)
         {
             Log.Logger.Debug("Tentando excluir compromisso... {@c}", compromisso);
