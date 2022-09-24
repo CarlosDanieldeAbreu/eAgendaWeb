@@ -98,13 +98,13 @@ namespace eAgenda.Webpi.Controllers.ModuloCompromisso
         [HttpDelete("{id:guid}")]
         public ActionResult Excluir(Guid id)
         {
-            var tarefaResult = servicoCompromisso.Excluir(id);
+            var compromissoResult = servicoCompromisso.Excluir(id);
 
-            if (tarefaResult.IsFailed && RegistroNaoEncontrado<Compromisso>(tarefaResult))
-                return NotFound(tarefaResult);
+            if (compromissoResult.IsFailed && RegistroNaoEncontrado<Compromisso>(compromissoResult))
+                return NotFound(compromissoResult);
 
-            if (tarefaResult.IsFailed)
-                return InternalError<Compromisso>(tarefaResult);
+            if (compromissoResult.IsFailed)
+                return InternalError<Compromisso>(compromissoResult);
 
             return NoContent();
         }
