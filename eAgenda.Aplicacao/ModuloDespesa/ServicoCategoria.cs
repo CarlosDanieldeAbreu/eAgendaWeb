@@ -81,6 +81,16 @@ namespace eAgenda.Aplicacao.ModuloDespesa
             return Result.Ok(categoria);
         }
 
+        public Result Excluir(Guid id)
+        {
+            var contatoResult = SelecionarPorId(id);
+
+            if (contatoResult.IsSuccess)
+                return Excluir(contatoResult.Value);
+
+            return Result.Fail(contatoResult.Errors);
+        }
+
         public Result Excluir(Categoria categoria)
         {
             Log.Logger.Debug("Tentando excluir categoria... {@c}", categoria);
