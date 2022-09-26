@@ -14,10 +14,8 @@ namespace eAgenda.Webpi.Controllers.Config.AutoMapperConfig.ModuloDespesa
 
         private void ConverterDeModelParaEntidade()
         {
-            CreateMap<InserirDespesaViewModel, Despesa>()
-                .ForMember(destino => destino.Categorias, opt => opt.Ignore());
-            CreateMap<EditarDespesaViewModel, Despesa>()
-                .ForMember(destino => destino.Categorias, opt => opt.Ignore());
+            CreateMap<InserirDespesaViewModel, Despesa>();
+            CreateMap<EditarDespesaViewModel, Despesa>();
         }
 
         private void ConverterDeEntidadeParaViewModel()

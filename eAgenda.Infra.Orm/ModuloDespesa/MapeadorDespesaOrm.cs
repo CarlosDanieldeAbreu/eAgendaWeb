@@ -15,6 +15,12 @@ namespace eAgenda.Infra.Orm.ModuloDespesa
             builder.Property(x => x.Data).IsRequired();
             builder.Property(x => x.FormaPagamento).HasConversion<int>().IsRequired();
 
+            builder.HasOne(x => x.usuario)
+                .WithMany()
+                .IsRequired(false)
+                .HasForeignKey(x => x.UsuarioId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.HasMany(x => x.Categorias)
                 .WithMany(x => x.Despesas)
                 .UsingEntity(x =>

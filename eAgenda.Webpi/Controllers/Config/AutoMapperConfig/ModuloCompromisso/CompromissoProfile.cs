@@ -14,10 +14,8 @@ namespace eAgenda.Webpi.Controllers.Config.AutoMapperConfig.ModuloCompromisso
 
         private void ConverterDeModelParaEntidade()
         {
-            CreateMap<InserirCompromissoViewModel, Compromisso>()
-                .ForMember(destino => destino.Contato, opt => opt.Ignore());
-            CreateMap<EditarCompromissoViewModel, Compromisso>()
-                .ForMember(destino => destino.Contato, opt => opt.Ignore());
+            CreateMap<InserirCompromissoViewModel, Compromisso>();
+            CreateMap<EditarCompromissoViewModel, Compromisso>();
         }
 
         private void ConverterDeEntidadeParaViewModel()

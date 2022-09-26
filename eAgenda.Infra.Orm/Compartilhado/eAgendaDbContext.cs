@@ -1,14 +1,18 @@
 ﻿using eAgenda.Dominio;
+using eAgenda.Dominio.ModuloAutenticacao;
 using eAgenda.Infra.Configs;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using System;
 using System.Linq;
 
 namespace eAgenda.Infra.Orm
 {
-    public class eAgendaDbContext : DbContext, IContextoPersistencia
+    public class eAgendaDbContext : IdentityDbContext<Usuario, IdentityRole<Guid>, Guid>, IContextoPersistencia
     {
         private string connectionString;
 

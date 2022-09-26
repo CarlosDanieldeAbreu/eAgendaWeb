@@ -19,7 +19,7 @@ namespace eAgenda.Webpi.ViewModels.ModuloDespesa
         [Required(ErrorMessage = "O campo '{0}' é obrigatório")]
         public FormaPgtoDespesaEnum FormaPagamento { get; set; }
 
-        public List<FormsCategoriaViewModel> Categorias { get; set; }
+        public List<Guid> IdCategorias { get; set; }
     }
 
     public class InserirDespesaViewModel : FormsDespesaViewModel

@@ -19,7 +19,7 @@ namespace eAgenda.Webpi.ViewModels.ModuloCompromisso
         [Required(ErrorMessage = "O campo '{0}' é obrigatório")]
         public TimeSpan HoraTermino { get; set; }
 
-        public FormsContatoViewModel Contato { get; set; }
+        public Guid IdContato { get; set; }
     }
 
     public class InserirCompromissoViewModel : FormsCompromissoViewModel

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eAgenda.Infra.Orm;
 
 namespace eAgenda.Infra.Orm.Migrations
 {
     [DbContext(typeof(eAgendaDbContext))]
-    partial class eAgendaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220926204150_Configuracao_Identity")]
+    partial class Configuracao_Identity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -262,14 +264,9 @@ namespace eAgenda.Infra.Orm.Migrations
                     b.Property<int>("TipoLocal")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UsuarioId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ContatoId");
-
-                    b.HasIndex("UsuarioId");
 
                     b.ToTable("TBCompromisso");
                 });
@@ -295,12 +292,7 @@ namespace eAgenda.Infra.Orm.Migrations
                     b.Property<string>("Telefone")
                         .HasColumnType("varchar(20)");
 
-                    b.Property<Guid>("UsuarioId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UsuarioId");
 
                     b.ToTable("TBContato");
                 });
@@ -314,12 +306,7 @@ namespace eAgenda.Infra.Orm.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(200)");
 
-                    b.Property<Guid>("UsuarioId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UsuarioId");
 
                     b.ToTable("TBCategoria");
                 });
@@ -339,15 +326,10 @@ namespace eAgenda.Infra.Orm.Migrations
                     b.Property<int>("FormaPagamento")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UsuarioId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<decimal>("Valor")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UsuarioId");
 
                     b.ToTable("TBDespesa");
                 });
@@ -395,12 +377,7 @@ namespace eAgenda.Infra.Orm.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(200)");
 
-                    b.Property<Guid>("UsuarioId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UsuarioId");
 
                     b.ToTable("TBTarefa");
                 });
@@ -478,44 +455,7 @@ namespace eAgenda.Infra.Orm.Migrations
                         .HasForeignKey("ContatoId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("eAgenda.Dominio.ModuloAutenticacao.Usuario", "usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.Navigation("Contato");
-
-                    b.Navigation("usuario");
-                });
-
-            modelBuilder.Entity("eAgenda.Dominio.ModuloContato.Contato", b =>
-                {
-                    b.HasOne("eAgenda.Dominio.ModuloAutenticacao.Usuario", "usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("usuario");
-                });
-
-            modelBuilder.Entity("eAgenda.Dominio.ModuloDespesa.Categoria", b =>
-                {
-                    b.HasOne("eAgenda.Dominio.ModuloAutenticacao.Usuario", "usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("usuario");
-                });
-
-            modelBuilder.Entity("eAgenda.Dominio.ModuloDespesa.Despesa", b =>
-                {
-                    b.HasOne("eAgenda.Dominio.ModuloAutenticacao.Usuario", "usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("usuario");
                 });
 
             modelBuilder.Entity("eAgenda.Dominio.ModuloTarefa.ItemTarefa", b =>
@@ -527,16 +467,6 @@ namespace eAgenda.Infra.Orm.Migrations
                         .IsRequired();
 
                     b.Navigation("Tarefa");
-                });
-
-            modelBuilder.Entity("eAgenda.Dominio.ModuloTarefa.Tarefa", b =>
-                {
-                    b.HasOne("eAgenda.Dominio.ModuloAutenticacao.Usuario", "usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("usuario");
                 });
 
             modelBuilder.Entity("eAgenda.Dominio.ModuloTarefa.Tarefa", b =>

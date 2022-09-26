@@ -1,4 +1,5 @@
-﻿using System;
+﻿using eAgenda.Dominio.ModuloAutenticacao;
+using System;
 using Taikandi;
 
 namespace eAgenda.Dominio.Compartilhado
@@ -7,9 +8,8 @@ namespace eAgenda.Dominio.Compartilhado
     {
         public Guid Id { get; set; }
 
-        //public IdentityUser<Guid> Usuario { get; set; }
-
-        //public Guid UsuarioId { get; set; }
+        public Guid UsuarioId { get; set; }
+        public Usuario usuario { get; set; }
 
         public EntidadeBase()
         {
