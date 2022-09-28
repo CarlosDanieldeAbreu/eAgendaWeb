@@ -1,8 +1,10 @@
+using eAgenda.Aplicacao.ModuloAutenticacao;
 using eAgenda.Aplicacao.ModuloCompromisso;
 using eAgenda.Aplicacao.ModuloContato;
 using eAgenda.Aplicacao.ModuloDespesa;
 using eAgenda.Aplicacao.ModuloTarefa;
 using eAgenda.Dominio;
+using eAgenda.Dominio.ModuloAutenticacao;
 using eAgenda.Dominio.ModuloCompromisso;
 using eAgenda.Dominio.ModuloContato;
 using eAgenda.Dominio.ModuloDespesa;
@@ -13,24 +15,24 @@ using eAgenda.Infra.Orm.ModuloCompromisso;
 using eAgenda.Infra.Orm.ModuloContato;
 using eAgenda.Infra.Orm.ModuloDespesa;
 using eAgenda.Infra.Orm.ModuloTarefa;
+using eAgenda.Webpi.Controllers.Config.AutoMapperConfig.ModuloAutenticao;
 using eAgenda.Webpi.Controllers.Config.AutoMapperConfig.ModuloCompromisso;
 using eAgenda.Webpi.Controllers.Config.AutoMapperConfig.ModuloContato;
 using eAgenda.Webpi.Controllers.Config.AutoMapperConfig.ModuloDespesa;
 using eAgenda.Webpi.Controllers.Config.AutoMapperConfig.ModuloTarefa;
 using eAgenda.Webpi.Filters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
 namespace eAgenda.Webpi
 {
@@ -58,8 +60,14 @@ namespace eAgenda.Webpi
                 config.AddProfile<CompromissoProfile>();
                 config.AddProfile<CategoriaProfile>();
                 config.AddProfile<DespesaProfile>();
+                config.AddProfile<UsuarioProfile>();
             });
             services.AddSingleton((x) => new ConfiguracaoAplicacaoeAgenda().ConnectionStrings);
+
+            services.AddScoped<eAgendaDbContext>();
+            services.AddIdentity<Usuario, IdentityRole<Guid>>()
+                .AddEntityFrameworkStores<eAgendaDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddScoped<IContextoPersistencia, eAgendaDbContext>();
             services.AddScoped<IRepositorioTarefa, RepositorioTarefaOrm>();
@@ -68,11 +76,15 @@ namespace eAgenda.Webpi
             services.AddScoped<IRepositorioCategoria, RepositorioCategoriaOrm>();
             services.AddScoped<IRepositorioDespesa, RepositorioDespesaOrm>();
 
+            services.AddTransient<UserManager<Usuario>>();
+            services.AddTransient<SignInManager<Usuario>>();
+
             services.AddTransient<ServicoTarefa>();
             services.AddTransient<ServicoContato>();
             services.AddTransient<ServicoCompromisso>();
             services.AddTransient<ServicoCategoria>();
             services.AddTransient<ServicoDespesa>();
+            services.AddTransient<ServicoAutenticacao>();
 
             services.AddControllers(config =>
             {
@@ -82,6 +94,27 @@ namespace eAgenda.Webpi
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "eAgenda.Webpi", Version = "v1" });
+            });
+
+            var key = Encoding.ASCII.GetBytes("SegredoSuperSecretoDoeAgenda");
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidAudience = "http://localhost",
+                    ValidIssuer = "eAgenda"
+                };
             });
         }
 
@@ -98,6 +131,8 @@ namespace eAgenda.Webpi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

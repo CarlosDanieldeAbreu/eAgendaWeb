@@ -3,6 +3,7 @@ using eAgenda.Aplicacao.ModuloTarefa;
 using eAgenda.Dominio.ModuloTarefa;
 using eAgenda.Webpi.Controllers.Compartilhado;
 using eAgenda.Webpi.ViewModels.ModuloTarefa;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace eAgenda.Webpi.Controllers.ModuloTarefa
 {
     [Route("api/[controller]")]
     [ApiController]
-
+    [Authorize]
     public class TarefasController : eAgendaControllerBase
     {
         private readonly ServicoTarefa servicoTarefa;

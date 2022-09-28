@@ -3,6 +3,7 @@ using eAgenda.Aplicacao.ModuloDespesa;
 using eAgenda.Dominio.ModuloDespesa;
 using eAgenda.Webpi.Controllers.Compartilhado;
 using eAgenda.Webpi.ViewModels.ModuloDespesa;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,6 +13,7 @@ namespace eAgenda.Webpi.Controllers.ModuloDespesa
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DespesaController : eAgendaControllerBase
     {
         private readonly ServicoDespesa servicoDespesa;

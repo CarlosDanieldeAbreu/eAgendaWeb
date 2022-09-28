@@ -3,6 +3,7 @@ using eAgenda.Aplicacao.ModuloCompromisso;
 using eAgenda.Dominio.ModuloCompromisso;
 using eAgenda.Webpi.Controllers.Compartilhado;
 using eAgenda.Webpi.ViewModels.ModuloCompromisso;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,6 +13,7 @@ namespace eAgenda.Webpi.Controllers.ModuloCompromisso
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CompromissoController : eAgendaControllerBase
     {
         private readonly ServicoCompromisso servicoCompromisso;

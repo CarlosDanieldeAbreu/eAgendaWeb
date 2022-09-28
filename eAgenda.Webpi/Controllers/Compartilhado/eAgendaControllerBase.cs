@@ -17,6 +17,15 @@ namespace eAgenda.Webpi.Controllers.Compartilhado
             });
         }
 
+        protected ActionResult BadRequest<T>(Result<T> registroResult)
+        {
+            return StatusCode(300, new
+            {
+                sucesso = false,
+                erros = registroResult.Errors.Select(x => x.Message)
+            });
+        }
+
         protected static bool RegistroNaoEncontrado<T>(Result<T> registroResult)
         {
             return registroResult.Errors.Any(x => x.Message.Contains("não encontrada"));
