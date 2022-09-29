@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 
 namespace eAgenda.Webpi.Controllers.ModuloTarefa
 {
@@ -28,7 +29,7 @@ namespace eAgenda.Webpi.Controllers.ModuloTarefa
         [HttpGet]
         public ActionResult<List<ListarTarefaViewModel>> SelecionarTodos()
         {
-            var tarefaResult = servicoTarefa.SelecionarTodos(StatusTarefaEnum.Todos);
+            var tarefaResult = servicoTarefa.SelecionarTodos(StatusTarefaEnum.Todos, UsuarioLogado.Id);
 
             if (tarefaResult.IsFailed)
                 return InternalError(tarefaResult);
@@ -63,6 +64,8 @@ namespace eAgenda.Webpi.Controllers.ModuloTarefa
         {
             var tarefa = mapeadorTarefas.Map<Tarefa>(tarefaVM);
 
+            tarefa.UsuarioId = UsuarioLogado.Id;
+
             var tarefaResult = servicoTarefa.Inserir(tarefa);
 
             if (tarefaResult.IsFailed)
@@ -84,6 +87,8 @@ namespace eAgenda.Webpi.Controllers.ModuloTarefa
                 return NotFound(tarefaResult);
 
             var tarefa = mapeadorTarefas.Map(tarefaVM, tarefaResult.Value);
+
+            tarefa.UsuarioId = UsuarioLogado.Id;
 
             tarefaResult = servicoTarefa.Editar(tarefa);
 

@@ -131,13 +131,13 @@ namespace eAgenda.Aplicacao.ModuloTarefa
             }
         }
 
-        public Result<List<Tarefa>> SelecionarTodos(StatusTarefaEnum statusSelecionado)
+        public Result<List<Tarefa>> SelecionarTodos(StatusTarefaEnum statusSelecionado, Guid guid = new Guid())
         {
             Log.Logger.Debug("Tentando selecionar tarefas...");
 
             try
             {
-                var tarefas = repositorioTarefa.SelecionarTodos(statusSelecionado);
+                var tarefas = repositorioTarefa.SelecionarTodos(statusSelecionado, guid);
 
                 Log.Logger.Information("Tarefas selecionadas com sucesso");
 

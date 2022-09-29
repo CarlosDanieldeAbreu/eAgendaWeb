@@ -1,13 +1,48 @@
-﻿using FluentResults;
+﻿using eAgenda.Webpi.ViewModels.ModuloAutenticacao;
+using FluentResults;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
+using System.Security.Claims;
 
 namespace eAgenda.Webpi.Controllers.Compartilhado
 {
     [ApiController]
     public abstract class eAgendaControllerBase : ControllerBase
     {
+        private UsuarioTokenViewModel usuario;
+
+        public UsuarioTokenViewModel UsuarioLogado
+        {
+            get
+            {
+                if (EstaAutenticado())
+                {
+                    usuario = new UsuarioTokenViewModel();
+
+                    var id = Request?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                    if (!string.IsNullOrEmpty(id))
+                        usuario.Id = Guid.Parse(id);
+
+                    var nome = Request?.HttpContext?.User?.FindFirst(ClaimTypes.GivenName)?.Value;
+
+                    if (!string.IsNullOrEmpty(nome))
+                        usuario.Nome = nome;
+
+                    var email = Request?.HttpContext?.User?.FindFirst(ClaimTypes.Email)?.Value;
+
+                    if (!string.IsNullOrEmpty(email))
+                        usuario.Email = email;
+
+                    return usuario;
+                }
+
+                return null;
+            }
+        }
+
         protected ActionResult InternalError<T>(Result<T> registroResult)
         {
             return StatusCode(500, new
@@ -38,6 +73,24 @@ namespace eAgenda.Webpi.Controllers.Compartilhado
                 sucesso = false,
                 erros = registroResult.Errors.Select(x => x.Message)
             });
+        }
+
+        protected Guid ObtemId()
+        {
+            var id = Request.HttpContext.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(id) == false)
+                return Guid.Empty;
+
+            return Guid.Parse(id);
+        }
+
+        private bool EstaAutenticado()
+        {
+            if (Request?.HttpContext?.User?.Identity != null)
+                return true;
+
+            return false;
         }
     }
 }
