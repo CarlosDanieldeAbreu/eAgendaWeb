@@ -40,7 +40,7 @@ namespace eAgenda.Webpi.Controllers.ModuloAutenticao
             return Ok(new
             {
                 sucesso = true,
-                dados = usuarioResult.Value
+                dados = GerarJwt(usuarioResult.Value)
             });
         }
 
@@ -57,6 +57,14 @@ namespace eAgenda.Webpi.Controllers.ModuloAutenticao
                 sucesso = true,
                 dados = GerarJwt(usuarioResult.Value)
             });
+        }
+
+        [HttpPost("sair")]
+        public async Task<ActionResult> Logout()
+        {
+            await servicoAutenticacao.Sair();
+
+            return Ok();
         }
 
         private TokenViewModel GerarJwt(Usuario usuario)

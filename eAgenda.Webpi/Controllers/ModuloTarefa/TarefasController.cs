@@ -64,8 +64,6 @@ namespace eAgenda.Webpi.Controllers.ModuloTarefa
         {
             var tarefa = mapeadorTarefas.Map<Tarefa>(tarefaVM);
 
-            tarefa.UsuarioId = UsuarioLogado.Id;
-
             var tarefaResult = servicoTarefa.Inserir(tarefa);
 
             if (tarefaResult.IsFailed)
@@ -75,6 +73,24 @@ namespace eAgenda.Webpi.Controllers.ModuloTarefa
             {
                 sucesso = true,
                 dados = tarefaVM
+            });
+        }
+
+        [HttpGet("{id:guid}")]
+        public ActionResult<FormsTarefaViewModel> SelecionarTarefaPorId(Guid id)
+        {
+            var tarefaResult = servicoTarefa.SelecionarPorId(id);
+
+            if (tarefaResult.IsFailed && RegistroNaoEncontrado(tarefaResult))
+                return NotFound(tarefaResult);
+
+            if (tarefaResult.IsFailed)
+                return InternalError(tarefaResult);
+
+            return Ok(new
+            {
+                sucesso = true,
+                dados = mapeadorTarefas.Map<FormsTarefaViewModel>(tarefaResult.Value)
             });
         }
 
@@ -88,7 +104,7 @@ namespace eAgenda.Webpi.Controllers.ModuloTarefa
 
             var tarefa = mapeadorTarefas.Map(tarefaVM, tarefaResult.Value);
 
-            tarefa.UsuarioId = UsuarioLogado.Id;
+            //tarefa.UsuarioId = UsuarioLogado.Id;
 
             tarefaResult = servicoTarefa.Editar(tarefa);
 
