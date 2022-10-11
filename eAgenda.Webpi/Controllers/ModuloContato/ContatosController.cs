@@ -58,7 +58,7 @@ namespace eAgenda.Webpi.Controllers.ModuloContato
         }
 
         [HttpPost]
-        public ActionResult<FormsContatoViewModel> Inserir(InserirContatoViewModel contatoVM)
+        public ActionResult<FormsContatoViewModel> Inserir(FormsContatoViewModel contatoVM)
         {
             var contato = mapeadorContatos.Map<Contato>(contatoVM);
 
@@ -75,7 +75,7 @@ namespace eAgenda.Webpi.Controllers.ModuloContato
         }
 
         [HttpPut("{id:guid}")]
-        public ActionResult<FormsContatoViewModel> Editar(Guid id, EditarContatoViewModel contatoVM)
+        public ActionResult<FormsContatoViewModel> Editar(Guid id, FormsContatoViewModel contatoVM)
         {
             var contatoResult = servicoContato.SelecionarPorId(id);
 
